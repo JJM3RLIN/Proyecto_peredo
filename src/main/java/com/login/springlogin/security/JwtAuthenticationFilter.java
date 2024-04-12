@@ -28,7 +28,7 @@ import jakarta.servlet.http.HttpSession;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
     
     private AuthenticationManager authenticationManager;
-    UserDTO userDTO = null;
+    private UserDTO userDTO = null;
     
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
