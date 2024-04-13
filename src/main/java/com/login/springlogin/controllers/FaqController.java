@@ -11,10 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.login.springlogin.DTO.FaqDTO;
 import com.login.springlogin.DTO.IdDTO;
+import com.login.springlogin.models.Faq;
 import com.login.springlogin.services.FaqService;
 
 @RestController
@@ -23,16 +27,15 @@ public class FaqController {
     @Autowired
     FaqService faqService;
     @PostMapping("/crear")
-    public ResponseEntity<?> createFaq(@RequestBody FaqDTO faqDTO) {
-        Map<String,String> response = new HashMap<>();
-        response.put("mensaje", faqService.create(faqDTO));
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> createFaq(@RequestParam String pregunta, @RequestParam String respuesta, @RequestPart MultipartFile file) {
+        
+        FaqDTO faqDTO = new FaqDTO(pregunta, respuesta);
+        return ResponseEntity.ok().body(getResponse(faqService.create(faqDTO, file)));
     }
     @PostMapping("/actualizar")
-    public ResponseEntity<?> updateFaq(@RequestBody FaqDTO faqDTO) {
-        Map<String,String> response = new HashMap<>();
-        response.put("mensaje", faqService.update(faqDTO));
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<?> updateFaq(@RequestParam String id,@RequestParam String pregunta, @RequestParam String respuesta,@RequestParam(name = "ruta") String file_ruta   ,@RequestPart MultipartFile file) {
+        FaqDTO faqDTO = new FaqDTO(Integer.parseInt(id),pregunta, respuesta,file_ruta);
+        return ResponseEntity.ok().body(getResponse(faqService.update(faqDTO, file)));
     }
     @PostMapping("/eliminar")
     public ResponseEntity<?> deleteFaq(@RequestBody IdDTO idDTO) {   
